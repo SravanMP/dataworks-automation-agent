@@ -470,18 +470,20 @@ async def run_task(task: str):
             A10(**json.loads(arguments))
 
 
-        if "B12"== task_code:
-            B12(**json.loads(arguments))
+        if "B1"== task_code:
+            B1(**json.loads(arguments))
+        if "B2"== task_code:
+            B2(**json.loads(arguments))
         if "B3" == task_code:
             B3(**json.loads(arguments))
         if "B5" == task_code:
             B5(**json.loads(arguments))
         if "B6" == task_code:
             B6(**json.loads(arguments))
-        if "B7" == task_code:
-            B7(**json.loads(arguments))
         if "B9" == task_code:
             B9(**json.loads(arguments))
+        if "B10"== task_code:
+            B10(**json.loads(arguments))
         return {"message": f"{task_code} Task '{task}' executed successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

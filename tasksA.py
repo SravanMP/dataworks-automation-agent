@@ -214,6 +214,7 @@ def get_embedding(text):
     response.raise_for_status()
     return response.json()["data"][0]["embedding"]
 
+
 def A9(filename='/data/comments.txt', output_filename='/data/comments-similar.txt'):
     # Read comments
     with open(filename, 'r') as f:
@@ -237,6 +238,7 @@ def A9(filename='/data/comments.txt', output_filename='/data/comments-similar.tx
     with open(output_filename, 'w') as f:
         f.write(most_similar[0] + '\n')
         f.write(most_similar[1] + '\n')
+
 
 def A10(filename='/data/ticket-sales.db', output_filename='/data/ticket-sales-gold.txt', query="SELECT SUM(units * price) FROM tickets WHERE type = 'Gold'"):
     # Connect to the SQLite database

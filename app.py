@@ -278,18 +278,27 @@ function_definitions_llm = [
         }
     },
     {
-        "name": "B12",
-        "description": "Check if filepath starts with /data",
+        "name": "B1",
+        "description": "Ensure the file path starts with /data to prevent unauthorized access and ensure files are opened in read-only mode.",
         "parameters": {
             "type": "object",
             "properties": {
-                "filepath": {
-                    "type": "string",
-                    "pattern": r"^/data/.*",
-                    # "description": "Filepath must start with /data to ensure secure access."
-                }
+                "filepath": {"type": "string", "pattern": r"^/data/.*", "description": "Filepath must start with /data to ensure secure access."},
+                "mode": {"type": "string", "pattern": r"^r$", "description": "File must be opened in read-only mode."}
             },
-            "required": ["filepath"]
+            "required": ["filepath", "mode"]
+        }
+    },
+    {
+        "name": "B2",
+        "description": "Prevent data deletion by ensuring files are not opened in write, append, or exclusive modes.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "filepath": {"type": "string", "pattern": r"^/data/.*", "description": "Filepath must start with /data to ensure secure access."},
+                "mode": {"type": "string", "pattern": r"^(?!.*[wxa]).*$", "description": "File must not be opened in write, append, or exclusive modes."}
+            },
+            "required": ["filepath", "mode"]
         }
     },
     {
@@ -334,6 +343,60 @@ function_definitions_llm = [
                 }
             },
             "required": ["db_path", "query", "output_filename"]
+        }
+    },
+    {
+    "name": "B4",
+    "description": "Clone a git repository, make changes, and commit those changes.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "repo_url": {
+                "type": "string",
+                "pattern": r"^https?://.*\.git$",
+                "description": "URL of the git repository to clone."
+            },
+            "file_path": {
+                "type": "string",
+                "pattern": r"^/data/.*",
+                "description": "Path to the file to modify within the repository."
+            },
+            "commit_message": {
+                "type": "string",
+                "description": "Message for the commit."
+            },
+            "branch": {
+                "type": "string",
+                "default": "main",
+                "description": "Branch to commit to (defaults to main)."
+            }
+        },
+        "required": ["repo_url", "file_path", "commit_message"]
+        }
+    },
+    {
+    "name": "B8",
+    "description": "Transcribe audio from an MP3 file and save the transcription to a text file.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "audio_path": {
+                "type": "string",
+                "pattern": r".*/(.*\.mp3)",
+                "description": "Path to the input MP3 file."
+            },
+            "output_path": {
+                "type": "string",
+                "pattern": r".*/(.*\.txt)",
+                "description": "Path where the transcription will be saved."
+            },
+            "language": {
+                "type": "string",
+                "default": "en",
+                "description": "Optional. Language code for transcription (defaults to English)."
+            }
+        },
+        "required": ["audio_path", "output_path"]
         }
     },
     {
@@ -384,6 +447,19 @@ function_definitions_llm = [
                 }
             },
             "required": ["image_path", "output_path"]
+        }
+    },
+    {
+        "name": "B10",
+        "description": "Filter a CSV file based on a column and value, and return the filtered data as JSON.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "csv_path": {"type": "string", "pattern": r"^/data/.*\.csv$", "description": "Path to the CSV file to filter."},
+                "filter_column": {"type": "string", "description": "Column name to filter by."},
+                "filter_value": {"type": "string", "description": "Value to filter the column by."}
+            },
+            "required": ["csv_path", "filter_column", "filter_value"]
         }
     },
     {
